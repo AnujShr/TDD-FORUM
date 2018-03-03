@@ -19,14 +19,26 @@ class ThreadController extends Controller
         return view('threads.index', compact('threads'));
     }
 
-    public function show(Thread $thread)
+    /**
+     * @param $channel_id
+     * @param Thread $thread
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show($channel_id, Thread $thread)
     {
         return view('threads.show', compact('thread'));
     }
 
     public function store(Request $request)
     {
-        $thread = Thread::create(['user_id' => auth()->id(),
+        $this->validate($request, [
+           'title' => 'required',
+           'channel_id' => 'required|exists:channels,id',
+           'body' => 'required'
+        ]);
+        $thread = Thread::create([
+            'user_id' => auth()->id(),
+            'channel_id' => request('channel_id'),
             'title' => request('title'),
             'body' => request('body')
         ]);

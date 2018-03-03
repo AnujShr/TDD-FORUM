@@ -23,26 +23,33 @@ class ThreadsTest extends TestCase
 
     }
 
+    /** Thread URL*/
+    public function test_a_can_make_a_string_path()
+    {
+        $thread = create('App\Thread');
+        $this->assertEquals(
+            "/threads/{$thread->channel->slug}/{$thread->id}", $thread->path());
+    }
+
     /** All thread view */
     public function test_a_user_can_browse_all_threads()
     {
-        $response = $this->get('/threads')
-            ->assertSee($this->threads->title);
+        $response = $this->get('/threads')->assertSee($this->threads->title);
     }
 
     /** Single Thread*/
     public function test_a_user_can_view_single_thread()
     {
-        $response = $this->get($this->threads->path())
-            ->assertSee($this->threads->title);
+        $response = $this->get($this->threads->path())->assertSee($this->threads->title);
     }
 
     /** *has replies*/
     public function test_can_read_reply()
     {
-        $reply = factory('App\Reply')->create(['thread_id' => $this->threads->id]);
-        $response = $this->get($this->threads->path())
-            ->assertSee($reply->body);
+        $reply = factory('App\Reply')->create([
+            'thread_id' => $this->threads->id
+        ]);
+        $response = $this->get($this->threads->path())->assertSee($reply->body);
 
 
     }
