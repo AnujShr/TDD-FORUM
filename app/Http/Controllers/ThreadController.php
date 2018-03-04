@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Channel;
 use Illuminate\Http\Request;
 use App\Thread;
 
@@ -10,12 +11,21 @@ class ThreadController extends Controller
     public function __construct()
     {
 //        $this->middleware('auth')->only('store');
-        $this->middleware('auth')->except(['index','show']);
+        $this->middleware('auth')->except(['index', 'show']);
     }
 
-    public function index()
+    /**
+     * @param null $channelSlug
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index(Channel $channel)
     {
-        $threads = Thread::latest()->get();
+        if ($channel->exists) {
+            $threads = $channel->threads()->latest()->get();
+
+        } else
+            $threads = Thread::latest()->get();
+
         return view('threads.index', compact('threads'));
     }
 
@@ -31,17 +41,8 @@ class ThreadController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, [
-           'title' => 'required',
-           'channel_id' => 'required|exists:channels,id',
-           'body' => 'required'
-        ]);
-        $thread = Thread::create([
-            'user_id' => auth()->id(),
-            'channel_id' => request('channel_id'),
-            'title' => request('title'),
-            'body' => request('body')
-        ]);
+        $this->validate($request, ['title' => 'required', 'channel_id' => 'required|exists:channels,id', 'body' => 'required']);
+        $thread = Thread::create(['user_id' => auth()->id(), 'channel_id' => request('channel_id'), 'title' => request('title'), 'body' => request('body')]);
 
         return redirect($thread->path());
     }
