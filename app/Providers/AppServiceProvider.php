@@ -14,11 +14,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-//        will load before the refresh database
-//        \View::share('channels', \App\Channel::all());
-
-        \View::composer('*',function($view){
-            $view->with('channels',Channel::all());
+        \View::composer('*', function ($view) {
+            $channels = \Cache::rememberForever('channels', function () {
+                return Channel::all();
+            });
+            $view->with('channels', $channels);
         });
     }
 
