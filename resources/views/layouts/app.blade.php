@@ -13,6 +13,11 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
+<style>
+    body { padding-bottom: 100px;}
+    .level {display:flex; align-items:center; }
+    .flex {flex:1;}
+</style>
 <body>
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
@@ -31,13 +36,15 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Channels
+                            Browse Threads
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="/threads/">All Threads</a>
                            @if(auth()->check())
                             <a class="dropdown-item" href="/threads/?by={{auth()->user()->name}}">My Thread</a>
                             @endif
+                            <a class="dropdown-item" href="/threads/?popular=1">Popular All Time</a>
+
                         </div>
                     </li>
 

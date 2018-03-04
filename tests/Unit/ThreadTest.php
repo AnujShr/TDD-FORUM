@@ -16,7 +16,7 @@ class ThreadTest extends TestCase
      * @return void
      *
      */
-
+    protected $thread;
     public function setUp()
     {
         parent::setUp();
@@ -53,4 +53,5 @@ class ThreadTest extends TestCase
         $thread = create('App\Thread');
         $this->assertInstanceOf('App\Channel',$thread->channel);
     }
+
 }

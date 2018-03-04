@@ -9,6 +9,7 @@ class ThreadsTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected $threads;
     /**
      * A basic test example.
      *
@@ -26,8 +27,8 @@ class ThreadsTest extends TestCase
     /** Thread URL*/
     public function test_a_can_make_a_string_path()
     {
-        $thread = create('App\Thread');
-        $this->assertEquals("/threads/{$thread->channel->slug}/{$thread->id}", $thread->path());
+        $threadwithTwoReplies= create('App\Thread');
+        $this->assertEquals("/threads/{$threadwithTwoReplies->channel->slug}/{$threadwithTwoReplies->id}", $threadwithTwoReplies->path());
     }
 
     /** All thread view */
@@ -69,5 +70,20 @@ class ThreadsTest extends TestCase
         $this->get('threads/?by=John Doe')->
         assertSee($threadByJohn->title)
             ->assertDontSee($threadNotByJohn->title);
+    }
+
+    function test_user_can_filter_thread_by_popular()
+    {
+        $threadwithTwoReplies= create('App\Thread');
+        $reply =create('App\Reply',['thread_id'=>$threadwithTwoReplies->id],2);
+
+        $threadwiththreeReplies= create('App\Thread');
+        $reply =create('App\Reply',['thread_id'=>$threadwiththreeReplies->id],3);
+
+        $threadwithNoReplies= $this->threads;
+
+        $response = $this->getJson('threads/?popular=1')->json();
+
+        $this->assertEquals([3,2,0],array_column($response,'replies_count'));
     }
 }
