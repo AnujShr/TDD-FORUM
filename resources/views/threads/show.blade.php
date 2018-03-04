@@ -15,9 +15,7 @@
 
                 </div>
                 {{--Reply Section--}}
-                @php
-                    $replies = $thread->replies()->paginate(1);
-                @endphp
+
                 @foreach($replies as $reply)
                     <br>
                     @include('threads.reply')
@@ -44,7 +42,7 @@
                             This Thread was publised {{$thread->created_at->diffForHumans()}}
                             by <a href="">{{$thread->creator->name}}</a>
                             and currently
-                            has {{$thread->replies_count}} {{str_plural('comment',$thread->replies_count)}}
+                            has {{$thread->favroite_count}} {{str_plural('comment',$thread->favorite_count)}}
                         </p>
                     </div>
                 </div>
