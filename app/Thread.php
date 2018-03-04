@@ -8,10 +8,20 @@ class Thread extends Model
 {
     protected $guarded = [];
 
+    public function channel()
+    {
+        return $this->belongsTo(Channel::class);
+    }
+
     public function path()
     {
         return "/threads/{$this->channel->slug}/{$this->id}";
 //        return '/threads/' . $this->channel->slug.'/'.$this->id;
+    }
+
+    public function scopeFilter($query,$filters)
+    {
+        return $filters->apply($query);
     }
 
     public function creator()
@@ -33,8 +43,5 @@ class Thread extends Model
         $this->replies()->create($reply);
     }
 
-    public function channel()
-    {
-        return $this->belongsTo(Channel::class);
-    }
+
 }
