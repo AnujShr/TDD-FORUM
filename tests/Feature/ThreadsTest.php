@@ -27,8 +27,7 @@ class ThreadsTest extends TestCase
     public function test_a_can_make_a_string_path()
     {
         $thread = create('App\Thread');
-        $this->assertEquals(
-            "/threads/{$thread->channel->slug}/{$thread->id}", $thread->path());
+        $this->assertEquals("/threads/{$thread->channel->slug}/{$thread->id}", $thread->path());
     }
 
     /** All thread view */
@@ -46,9 +45,7 @@ class ThreadsTest extends TestCase
     /** *has replies*/
     public function test_can_read_reply()
     {
-        $reply = factory('App\Reply')->create([
-            'thread_id' => $this->threads->id
-        ]);
+        $reply = factory('App\Reply')->create(['thread_id' => $this->threads->id]);
         $response = $this->get($this->threads->path())->assertSee($reply->body);
 
 
@@ -57,10 +54,20 @@ class ThreadsTest extends TestCase
     public function test_user_can_filter_threads_according_to_a_tags()
     {
         $channel = create('App\Channel');
-        $threadInChannle = create('App\Thread',['channel_id' => $channel->id]);
+        $threadInChannle = create('App\Thread', ['channel_id' => $channel->id]);
         $threadNotInChannel = create('App\Thread');
-        $this->get('/threads/'.$channel->slug)
-            ->assertSee($threadInChannle->title)
-            ->assertDontSee($threadNotInChannel->title);
+        $this->get('/threads/' . $channel->slug)->assertSee($threadInChannle->title)->assertDontSee($threadNotInChannel->title);
+    }
+
+    public function test_user_can_filter_threads_by_user_name()
+    {
+        $this->signIn(create('App\User',['name' => 'John Doe']));
+
+        $threadByJohn = create('App\Thread', ['user_id' => auth()->id()]);
+        $threadNotByJohn = create('App\Thread');
+
+        $this->get('threads/?by=John Doe')->
+        assertSee($threadByJohn->title)
+            ->assertDontSee($threadNotByJohn->title);
     }
 }
