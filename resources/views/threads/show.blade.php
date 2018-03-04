@@ -6,10 +6,12 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{$thread->title}}</div>
+                    <div class="card-header">
+                        <p><a href="{{route('profile',$thread->creator)}}">
+                                {{$thread->creator->name}}
+                            </a> posted:<strong> {{$thread->title}}</strong></p>
+                    </div>
                     <div class="card-body">
-                        <a href="#">{{$thread->creator->name}}</a> posted
-                        <h4>{{$thread->title}}</h4>
                         <div class="body">{{$thread->body}}</div>
                     </div>
 

@@ -19,14 +19,10 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <article>
-
-                                <div class="body">{{$thread->body}}</div>
-
-                            </article>
-                            <hr>
+                            <div class="body">{{$thread->body}}</div>
                         </div>
                     </div>
+                    <br>
                 @endforeach
             </div>
         </div>
