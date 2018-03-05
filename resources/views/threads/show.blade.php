@@ -7,9 +7,19 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <p><a href="{{route('profile',$thread->creator)}}">
+                        <div class="level">
+                            <h4 class="flex">
+                                 <a href="{{route('profile',$thread->creator)}}">
                                 {{$thread->creator->name}}
-                            </a> posted:<strong> {{$thread->title}}</strong></p>
+                                </a> posted:<strong> {{$thread->title}}</strong>
+                            </h4>
+                            <form action="{{$thread->path()}}" method="POST">
+                                {{csrf_field()}}
+                                {{method_field('DELETE')}}
+                                <button type="submit" class="btn btn-primary">Delete Thread</button>
+
+                            </form>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="body">{{$thread->body}}</div>

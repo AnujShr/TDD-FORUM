@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                @foreach($threads as $thread)
+                @forelse($threads as $thread)
                     <div class="card">
                         <div class="card-header">
                             <div class="level">
@@ -23,7 +23,12 @@
                         </div>
                     </div>
                     <br>
-                @endforeach
+                    @empty
+                    <div class="row justify-content-center">
+                        <STRONG>NO THREADS AVAILABLE ASSOCIATED WITH THE CHANNEL!!!
+                            BE THE FIRST ONE TO MAKE ONE</STRONG>
+                    </div>
+                    @endforelse
             </div>
         </div>
     </div>

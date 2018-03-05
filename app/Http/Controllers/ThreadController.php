@@ -32,12 +32,18 @@ class ThreadController extends Controller
         return view('threads.index', compact('threads'));
     }
 
+    public function create()
+    {
+        return view('threads.create');
+    }
+
     /**
-     * @param $channel_id
+     * @param $channel
      * @param Thread $thread
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @internal param $channel_id
      */
-    public function show($channel_id, Thread $thread)
+    public function show($channel, Thread $thread)
     {
         return view('threads.show', ['thread' => $thread, 'replies' => $thread->replies()->paginate(20)]);
     }
@@ -50,9 +56,14 @@ class ThreadController extends Controller
         return redirect($thread->path());
     }
 
-    public function create()
+    public function destroy($channel, Thread $thread)
     {
-        return view('threads.create');
+        if ($thread->user_id != auth()->id()) {
+            abort(403,'YOU DO NOT HAVE PERMISSION ');
+        }
+        $thread->delete();
+        if (request()->wantsJson()) return response([], 204); else
+            return redirect('/threads');
     }
 
 

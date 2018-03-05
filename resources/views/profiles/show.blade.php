@@ -9,6 +9,7 @@
             </h1>
         </div>
     </div>
+    <br>
     <div class="container">
         @foreach($threads as $thread)
             <div class="card">
