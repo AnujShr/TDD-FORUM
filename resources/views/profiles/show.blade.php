@@ -11,25 +11,10 @@
     </div>
     <br>
     <div class="container">
-        @foreach($threads as $thread)
-            <div class="card">
-                <a href="{{$thread->path()}}">
-                    <div class="card-header">
-                        <div class="level">
-                            <span class="flex">
-                                 <strong> {{$thread->title}}</strong>
-                              </span>
-                            <span class=>{{$thread->created_at->diffForHumans()}}</span>
-                        </div>
-                    </div>
-                </a>
-                <div class="card-body">
-                    <div class="body">{{$thread->body}}</div>
-                </div>
-            </div>
-            <br>
+        @foreach($activities as $activity)
+               @include("profiles.activities.{$activity->type}")
         @endforeach
-        {{$threads->links()}}
+{{--        {{$threads->links()}}--}}
     </div>
 
 @endsection
