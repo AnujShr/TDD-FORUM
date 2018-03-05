@@ -9,16 +9,16 @@
                     <div class="card-header">
                         <div class="level">
                             <h4 class="flex">
-                                 <a href="{{route('profile',$thread->creator)}}">
-                                {{$thread->creator->name}}
+                                <a href="{{route('profile',$thread->creator)}}">
+                                    {{$thread->creator->name}}
                                 </a> posted:<strong> {{$thread->title}}</strong>
                             </h4>
                             @can('update',$thread)
-                            <form action="{{$thread->path()}}" method="POST">
-                                {{csrf_field()}}
-                                {{method_field('DELETE')}}
-                                <button type="submit" class="btn btn-primary">Delete Thread</button>
-                            </form>
+                                <form action="{{$thread->path()}}" method="POST">
+                                    {{csrf_field()}}
+                                    {{method_field('DELETE')}}
+                                    <button type="submit" class="btn btn-primary">Delete Thread</button>
+                                </form>
                             @endcan
                         </div>
                     </div>
