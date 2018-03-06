@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Activity;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
