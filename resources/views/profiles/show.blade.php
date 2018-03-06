@@ -13,8 +13,10 @@
         @foreach($activities as $date=> $activity)
             <h3 class="card-header">{{$date}}</h3>
             @foreach($activity as $record)
-                {{--Overide the activity variable inside the partial by $record--}}
-                @include("profiles.activities.{$record->type}",['activity' => $record])
+                @if(view()->exists("profiles.activities.{$record->type}"))
+                    {{--Overide the variable $activity inside the partial by $record--}}
+                    @include("profiles.activities.{$record->type}",['activity' => $record])
+                @endif
             @endforeach
         @endforeach
         <br>

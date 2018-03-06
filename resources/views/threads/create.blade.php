@@ -27,7 +27,7 @@
                                        value="{{old('title')}}" required>
                             </div>
 
-                            <div class="form-group">A
+                            <div class="form-group">
                                 <label for="body">Content</label>
                                 <textarea required id="body" name="body" class="form-control">{{old('body')}}</textarea>
                             </div>

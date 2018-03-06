@@ -53,7 +53,8 @@ class ThreadController extends Controller
         $this->validate($request, ['title' => 'required', 'channel_id' => 'required|exists:channels,id', 'body' => 'required']);
         $thread = Thread::create(['user_id' => auth()->id(), 'channel_id' => request('channel_id'), 'title' => request('title'), 'body' => request('body')]);
 
-        return redirect($thread->path());
+         return redirect($thread->path())
+            ->with('flash','Your Thread Has Been Published!!!');
     }
 
     public function destroy($channel, Thread $thread)
