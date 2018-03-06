@@ -39,4 +39,14 @@ class ParticipateInForm extends TestCase
         $this->get($thread->path())->assertSee($reply->body);
 
     }
+
+    function test_authorized_user_can_delete_thread()
+    {
+        $this->signIn();
+
+        $reply = create('App\Reply',['user_id' => auth()->id()]);
+
+        $this->delete("/replies/{$reply->id}")->assertStatus(302);
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+    }
 }

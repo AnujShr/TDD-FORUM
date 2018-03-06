@@ -10,10 +10,7 @@ class ThreadPolicy
 {
     use HandlesAuthorization;
 
-    public function before($user)
-    {
 
-    }
 
     /**
      * Determine whether the user can view the thread.
