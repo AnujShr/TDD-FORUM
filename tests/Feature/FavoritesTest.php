@@ -29,14 +29,25 @@ class FavoritesTest extends TestCase
     {
         $this->signIn();
         $reply = create('App\Reply');
-        try{
+        try {
             $this->post('/replies/' . $reply->id . '/favorites');
             $this->post('/replies/' . $reply->id . '/favorites');
-        }
-        catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->fail('Did not expect to insert same record type');
         }
 
         $this->assertCount(1, $reply->favorites);
-   }
+    }
+
+    function test_auth_user_can_unfavorite_reply()
+    {
+        $this->signIn();
+        $reply = create('App\Reply');
+        $reply->favorites();
+        $this->delete('/replies/' . $reply->id . '/favorites');
+
+        $this->assertCount(0, $reply->favorites);
+
+
+    }
 }

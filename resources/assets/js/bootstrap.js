@@ -1,6 +1,4 @@
-
 window._ = require('lodash');
-window.Popper = require('popper.js').default;
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -11,8 +9,9 @@ window.Popper = require('popper.js').default;
 try {
     window.$ = window.jQuery = require('jquery');
 
-    require('bootstrap');
-} catch (e) {}
+    require('bootstrap-sass');
+} catch (e) {
+}
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -38,9 +37,37 @@ if (token) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
+/**
+ * Echo exposes an expressive API for subscribing to channels and listening
+ * for events that are broadcast by Laravel. Echo and event broadcasting
+ * allows your team to easily build robust real-time web applications.
+ */
+
+// import Echo from 'laravel-echo'
+
+// window.Pusher = require('pusher-js');
+
+// window.Echo = new Echo({
+//     broadcaster: 'pusher',
+//     key: 'your-pusher-key',
+//     cluster: 'mt1',
+//     encrypted: true
+// });
 window.Vue = require('vue');
 
-window.event = new Vue();
-window.flash = function (message){
-    window.events('flash',message);
+window.Vue.prototype.authorize = function (handler) {
+    let user = window.App.user;
+    return user ? handler(user) : false;
+}
+
+window.Vue.prototype.authorize = function (handler) {
+    //Additional Admin priviagle
+    let user = window.App.user;
+    return (user) ? handler(user) : false;
+}
+
+window.events = new Vue();
+
+window.flash = function (message) {
+    window.events.$emit('flash', message);
 };

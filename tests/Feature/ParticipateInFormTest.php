@@ -16,7 +16,8 @@ class ParticipateInForm extends TestCase
      * @return void
      */
 
-    function test_unauthenticated_users_may_not_add_reply(){
+    function test_unauthenticated_users_may_not_add_reply()
+    {
         $this->expectException('Illuminate\Auth\AuthenticationException');
         $this->post('/threads/some/1/replies', []);
     }
@@ -33,7 +34,7 @@ class ParticipateInForm extends TestCase
         //When the user adds a reply to the thread
         $reply = make('App\Reply');
 
-        $this->post($thread->path().'/replies', $reply->toArray());
+        $this->post($thread->path() . '/replies', $reply->toArray());
 
         //Then a thread should be visible on a page
         $this->get($thread->path())->assertSee($reply->body);
@@ -44,9 +45,20 @@ class ParticipateInForm extends TestCase
     {
         $this->signIn();
 
-        $reply = create('App\Reply',['user_id' => auth()->id()]);
+        $reply = create('App\Reply', ['user_id' => auth()->id()]);
 
         $this->delete("/replies/{$reply->id}")->assertStatus(302);
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
     }
+
+    function test_authorize_user_can_update_replies()
+    {
+        $this->signIn();
+        $reply = create('App\Reply', ['user_id' => auth()->id()]);
+        $updatedBody = "You have changed fool.";
+        $this->patch("/replies/{$reply->id}", ['body' => $updatedBody]);
+        $this->assertDatabaseHas('replies', ['id' => $reply->id, 'body' => $updatedBody]);
+    }
+
+
 }

@@ -12,7 +12,8 @@ class ReplyController extends Controller
      * @param Thread $thread
      */
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->middleware('auth');
     }
 
@@ -24,20 +25,25 @@ class ReplyController extends Controller
      */
     public function store($channelId, Thread $thread, Request $request)
     {
-        $this->validate($request,[
-            'body'=> 'required'
-        ]);
-        $thread->addReply([
-            'body' => request('body'),
-            'user_id' => auth()->id()
-        ]);
+        $this->validate($request, ['body' => 'required']);
+        $thread->addReply(['body' => request('body'), 'user_id' => auth()->id()]);
         return back()->with('flash', 'Your reply has been left!!!');
+    }
+
+    public function update(Reply $reply)
+    {
+        $this->authorize('update', $reply);
+        $reply->update(request(['body']));
+
     }
 
     public function destroy(Reply $reply)
     {
-        $this->authorize('update',$reply);
+        $this->authorize('update', $reply);
         $reply->delete();
-        return back();
+        if(request()->expectsJson()){
+            return response(['status' => 'Reply Deleted']);
+        }
+        return back() ;
     }
 }
