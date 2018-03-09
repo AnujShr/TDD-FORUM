@@ -2,7 +2,7 @@
 
 @section('content')
     {{--Thread Section--}}
-    <thread-view :initial-replies-count="{{$thread->replies_count}}"inline-template>
+    <thread-view :initial-replies-count="{{$thread->replies_count}}" inline-template>
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
@@ -27,21 +27,10 @@
                             <div class="body">{{$thread->body}}</div>
                         </div>
                     </div>
-                    <replies :data="{{ $thread->replies }}" @removed="repliesCount--"></replies>
+                    <replies :data="{{ $thread->replies }}"
+                    @added = "repliesCount ++ " @removed="repliesCount--"></replies>
 
-                    @if(auth()->check())
-                        <br>
-                        <form method="POST" action="{{$thread->path() . '/replies'}}">
-                            {{csrf_field()}}
-                            <div class="form-group">
-                            <textarea name="body" id="body" class="form-control" rows="10"
-                                      placeholder="Has Something to Say?"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-outline-dark btn-lg btn-block">REPLY</button>
-                        </form>
-                    @else
-                        <p class="text-center">Please <a href="{{ route('login') }}">SignIn</a> to reply.</p>
-                    @endif
+
                 </div>
                 <div class="col-md-4">
                     <div class="card">
@@ -50,7 +39,8 @@
                                 This Thread was publised {{$thread->created_at->diffForHumans()}}
                                 by <a href="">{{$thread->creator->name}}</a>
                                 and currently
-                                has <span v-text="repliesCount"></span> {{str_plural('comment',$thread->favorite_count)}}
+                                has <span
+                                        v-text="repliesCount"></span> {{str_plural('comment',$thread->favorite_count)}}
                             </p>
                         </div>
                     </div>
