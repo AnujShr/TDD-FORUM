@@ -45,15 +45,9 @@ class ThreadsTest extends TestCase
     }
 
     /** *has replies*/
-    public function test_can_read_reply()
-    {
-        $reply = factory('App\Reply')->create(['thread_id' => $this->threads->id]);
-        $response = $this->get($this->threads->path())->assertSee($reply->body);
 
 
-    }
-
-    public function test_user_can_filter_threads_according_to_a_tags()
+    public function test_user_can_filter_threads_according_to_a_channel()
     {
         $channel = create('App\Channel');
         $threadInChannle = create('App\Thread', ['channel_id' => $channel->id]);
@@ -69,6 +63,15 @@ class ThreadsTest extends TestCase
         $threadNotByJohn = create('App\Thread');
 
         $this->get('threads/?by=John Doe')->assertSee($threadByJohn->title)->assertDontSee($threadNotByJohn->title);
+    }
+
+    function test_can_filter_by_answered()
+    {
+        $thread = create('App\Thread');
+        create('App\Reply', ['thread_id' => $thread->id]);
+
+        $response = $this->getJson('threads?unanswered=1')->json();
+        $this->assertCount(1, $response);
     }
 
     function test_user_can_filter_thread_by_popular()
@@ -92,6 +95,9 @@ class ThreadsTest extends TestCase
         create('App\Reply', ['thread_id' => $thread->id], 2);
 
         $response = $this->getJson($thread->path() . '/replies')->json();
-        $this->assertCount(1, $response['data']);
+        $this->assertCount(2, $response['data']);
     }
+
+
+
 }

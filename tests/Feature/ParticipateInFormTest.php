@@ -26,8 +26,7 @@ class ParticipateInForm extends TestCase
     {
         //Given we has an authenticated User
 
-        $this->be($user = create('App\User'));
-
+        $this->signIn();
         //And an existing thread
         $thread = create('App\Thread');
 
@@ -37,11 +36,12 @@ class ParticipateInForm extends TestCase
         $this->post($thread->path() . '/replies', $reply->toArray());
 
         //Then a thread should be visible on a page
-        $this->get($thread->path())->assertSee($reply->body);
-
+//        $this->get($thread->path())->assertSee($reply->body);
+            $this->assertDatabaseHas('replies',['body' =>$reply->body]);
+            $this->assertEquals(1, $thread->fresh()->replies_count);
     }
 
-    function test_authorized_user_can_delete_thread()
+    function test_authorized_user_can_delete_replies()
     {
         $this->signIn();
 
@@ -49,6 +49,7 @@ class ParticipateInForm extends TestCase
 
         $this->delete("/replies/{$reply->id}")->assertStatus(302);
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+        $this->assertEquals(0,$reply->thread->fresh()->replies_count);
     }
 
     function test_authorize_user_can_update_replies()
