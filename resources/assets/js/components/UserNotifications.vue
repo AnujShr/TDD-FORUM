@@ -5,10 +5,12 @@
              Notification <span class="caret"></span>
         </a>
 
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown" v-if="notifications.length">
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown" >
+            <div v-if="notifications.length">
             <div v-for="notification in notifications" >
                 <a class="dropdown-item" :href="notification.data.link" v-text="notification.data.message">
                 </a>
+            </div>
             </div>
         </div>
     </li>
