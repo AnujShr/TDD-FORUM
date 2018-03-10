@@ -34,3 +34,5 @@ Route::delete('/replies/{reply}', 'ReplyController@destroy');
 Route::get('/profiles/{user}', 'ProfileController@show')->name('profile');
 Route::post('/threads/{channel}/{thread}/subscriptions','ThreadsSubscribeController@store');
 Route::delete('/threads/{channel}/{thread}/subscriptions','ThreadsSubscribeController@destroy');
+Route::get('/profiles/{user}/notifications', 'UserNotificationController@index');
+Route::delete('/profiles/{user}/notifications/{notification}', 'UserNotificationController@destroy');

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 

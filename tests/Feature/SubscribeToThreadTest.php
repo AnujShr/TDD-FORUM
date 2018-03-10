@@ -9,27 +9,26 @@ class SubscribeToThreadTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->signIn();
+    }
 
     public function test_a_user_can_susbscribe_to_threads()
     {
-        $this->signIn();
+
         $thread = create('App\Thread');
         $this->post($thread->path() . '/subscriptions');
-        $thread->addReply(['user_id' => auth()->id(), 'body' => 'Some reply here']);
+        $this->assertCount(1, $thread->fresh()->subscriptions);
     }
 
-    function test_user_can_unsubscrbe_from_test()
+    function test_user_can_unsubscribe_from_thread()
     {
-        $this->signIn();
+
         $thread = create('App\Thread');
         $thread->subscribe();
-
-        $this->delete($thread->path().'/subsriptions');
-        $this->assertCount(0,$thread->subscriptions);
+        $this->delete($thread->path() . '/subscriptions');
+        $this->assertCount(0, $thread->subscriptions);
     }
 }
