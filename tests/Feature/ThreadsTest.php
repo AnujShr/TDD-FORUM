@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ThreadsTest extends TestCase
@@ -107,6 +108,14 @@ class ThreadsTest extends TestCase
         $thread->subscribe();
         $this->assertTrue($thread->isSubscribedTo);
     }
+//    function test_notifies_all_registered_subscribers_when_a_reply_is_added()
+//    {
+//        Notification::fake();
+//        $this->signIn()->threads->subscribe();
+//        $this->threads->addReply(['body' => 'Foobar', 'user_id' => 1]);
+//
+//        Notification::assertSentTo(auth()->user(),ThreadWasUpdated::class);
+//    }
 
 
 }

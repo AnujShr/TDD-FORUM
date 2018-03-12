@@ -52,10 +52,7 @@ class CreateThreadTest extends TestCase
         $response->assertStatus(204);
         $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
-        $this->assertDatabaseMissing('activities', [
-            'subject_id' => $thread->id,
-            'subject_body' =>get_class($thread)
-            ]);
+        $this->assertDatabaseMissing('activities', ['subject_id' => $thread->id, 'subject_body' => get_class($thread)]);
     }
 
 //    function test_threads_be_deleted_only_who_have_permission()
@@ -66,4 +63,6 @@ class CreateThreadTest extends TestCase
 //
 //
 //    }
+
 }
+

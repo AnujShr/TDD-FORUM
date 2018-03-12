@@ -2,15 +2,16 @@
     <li class="nav-item dropdown">
         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-             Notification <span class="caret"></span>
+            <i class="fas fa-bell"></i>
         </a>
 
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown" >
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <div v-if="notifications.length">
-            <div v-for="notification in notifications" >
-                <a class="dropdown-item" :href="notification.data.link" v-text="notification.data.message">
-                </a>
-            </div>
+                <div v-for="notification in notifications">
+                    <a class="dropdown-item" :href="notification.data.link" v-text="notification.data.message"
+                       @click="markAsRead(notification)">
+                    </a>
+                </div>
             </div>
         </div>
     </li>
@@ -25,6 +26,12 @@
         created(){
             axios.get("/profiles/'" + window.App.user.name + "/notifications")
                 .then(response => this.notifications = response.data);
+        },
+        methods:{
+            markAsRead(notification){
+                axios.delete("/profiles/" + window.App.user.name + "/notifications/" + notification.id);
+            }
         }
+
     }
 </script>
