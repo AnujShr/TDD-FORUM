@@ -10,7 +10,13 @@
                             <div class="level">
                                 <h4 class="flex">
                                     <a href="{{$thread->path()}}">
-                                        {{$thread->title}}
+                                        @if (auth()->check() && $thread->hasUpdatesFor(auth()->user()))
+                                            <strong>
+                                                {{ $thread->title }}
+                                            </strong>
+                                        @else
+                                            {{ $thread->title }}
+                                        @endif
                                     </a>
                                 </h4>
                                 <a href="{{$thread->path()}}">
@@ -23,12 +29,12 @@
                         </div>
                     </div>
                     <br>
-                    @empty
+                @empty
                     <div class="row justify-content-center">
                         <STRONG>NO THREADS AVAILABLE ASSOCIATED WITH THE CHANNEL!!!
                             BE THE FIRST ONE TO MAKE ONE</STRONG>
                     </div>
-                    @endforelse
+                @endforelse
             </div>
         </div>
     </div>

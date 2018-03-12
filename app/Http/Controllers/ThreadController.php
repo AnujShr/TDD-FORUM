@@ -45,6 +45,9 @@ class ThreadController extends Controller
      */
     public function show($channel, Thread $thread)
     {
+        if (auth()->check()) {
+            auth()->user()->read($thread);
+        }
         return view('threads.show', compact('thread'));
     }
 
@@ -53,15 +56,14 @@ class ThreadController extends Controller
         $this->validate($request, ['title' => 'required', 'channel_id' => 'required|exists:channels,id', 'body' => 'required']);
         $thread = Thread::create(['user_id' => auth()->id(), 'channel_id' => request('channel_id'), 'title' => request('title'), 'body' => request('body')]);
 
-         return redirect($thread->path())
-            ->with('flash','Your Thread Has Been Published!!!');
+        return redirect($thread->path())->with('flash', 'Your Thread Has Been Published!!!');
     }
 
     public function destroy($channel, Thread $thread)
     {
-        $this->authorize('update' , $thread);
+        $this->authorize('update', $thread);
         if ($thread->user_id != auth()->id()) {
-            abort(403,'YOU DO NOT HAVE PERMISSION ');
+            abort(403, 'YOU DO NOT HAVE PERMISSION ');
         }
         $thread->delete();
         if (request()->wantsJson()) return response([], 204); else
