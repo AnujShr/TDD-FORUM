@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Reply;
+use App\Inspections\Spam;
 use Illuminate\Http\Request;
 use App\Thread;
 
@@ -14,8 +15,8 @@ class ReplyController extends Controller
 
     public function __construct()
     {
-    $this->middleware('auth',['except'=>'index']);
-    
+        $this->middleware('auth', ['except' => 'index']);
+
     }
 
     public function index($channelId, Thread $thread)
@@ -26,17 +27,20 @@ class ReplyController extends Controller
     /**
      * @param $channelId
      * @param Thread $thread
-     * @param Request $request
+     * @param Spam $spam
      * @return \Illuminate\Http\RedirectResponse
+     * @internal param Request $request
      */
-    public function store($channelId, Thread $thread, Request $request)
+    public function store($channelId, Thread $thread, Spam $spam)
     {
-        $this->validate($request, ['body' => 'required']);
+        $this->validate(request(), ['body' => 'required']);
+
+        $spam->detect(request('body'));
         $reply = $thread->addReply(['body' => request('body'), 'user_id' => auth()->id()]);
 
-       if(request()->expectsJson()){
-           return $reply->load('owner');
-       }
+        if (request()->expectsJson()) {
+            return $reply->load('owner');
+        }
         return back()->with('flash', 'Your reply has been left!!!');
     }
 
@@ -51,10 +55,10 @@ class ReplyController extends Controller
     {
         $this->authorize('update', $reply);
         $reply->delete();
-        if(request()->expectsJson()){
+        if (request()->expectsJson()) {
             return response(['status' => 'Reply Deleted']);
         }
-        return back() ;
+        return back();
     }
 
 

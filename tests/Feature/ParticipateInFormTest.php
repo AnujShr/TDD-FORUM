@@ -37,8 +37,8 @@ class ParticipateInForm extends TestCase
 
         //Then a thread should be visible on a page
 //        $this->get($thread->path())->assertSee($reply->body);
-            $this->assertDatabaseHas('replies',['body' =>$reply->body]);
-            $this->assertEquals(1, $thread->fresh()->replies_count);
+        $this->assertDatabaseHas('replies', ['body' => $reply->body]);
+        $this->assertEquals(1, $thread->fresh()->replies_count);
     }
 
     function test_authorized_user_can_delete_replies()
@@ -49,7 +49,7 @@ class ParticipateInForm extends TestCase
 
         $this->delete("/replies/{$reply->id}")->assertStatus(302);
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
-        $this->assertEquals(0,$reply->thread->fresh()->replies_count);
+        $this->assertEquals(0, $reply->thread->fresh()->replies_count);
     }
 
     function test_authorize_user_can_update_replies()
@@ -59,6 +59,20 @@ class ParticipateInForm extends TestCase
         $updatedBody = "You have changed fool.";
         $this->patch("/replies/{$reply->id}", ['body' => $updatedBody]);
         $this->assertDatabaseHas('replies', ['id' => $reply->id, 'body' => $updatedBody]);
+    }
+
+    function test_replies_that_contain_spam_may_not_be_created()
+    {
+        $this->signIn();
+
+        $thread = create('App\Thread');
+        $reply = make('App\Reply', [
+            'body' => 'Yahoo Customer Support'
+        ]);
+
+        $this->expectException(\Exception::class);
+
+        $this->post($thread->path() . '/replies', $reply->toArray());
     }
 
 
