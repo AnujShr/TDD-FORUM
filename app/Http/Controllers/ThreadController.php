@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Channel;
 //use App\User;
 use App\Filters\ThreadFilter;
-use Illuminate\Http\Request;
+use App\Rules\SpamFree;
 use App\Thread;
 
 class ThreadController extends Controller
@@ -51,9 +51,11 @@ class ThreadController extends Controller
         return view('threads.show', compact('thread'));
     }
 
-    public function store(Request $request)
+    public function store()
     {
-        $this->validate($request, ['title' => 'required', 'channel_id' => 'required|exists:channels,id', 'body' => 'required']);
+        request()->validate(['title' => ['required',new SpamFree], 'channel_id' => 'required|exists:channels,id', 'body' => ['required',new SpamFree]]);
+//        $this->validate(request(), ['title' => 'required|spamfree', 'channel_id' => 'required|exists:channels,id', 'body' => 'required|spamfree']);
+
         $thread = Thread::create(['user_id' => auth()->id(), 'channel_id' => request('channel_id'), 'title' => request('title'), 'body' => request('body')]);
 
         return redirect($thread->path())->with('flash', 'Your Thread Has Been Published!!!');
@@ -83,4 +85,5 @@ class ThreadController extends Controller
         $threads = $threads->get();
         return $threads;
     }
+
 }

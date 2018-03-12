@@ -16,7 +16,7 @@ class SpamTest extends TestCase
 
                 $this->expectException('Exception');
 
-                $spam->detect('yahoo customer support');
+                $spam->detect('fuck');
             }
 
     /** @test */

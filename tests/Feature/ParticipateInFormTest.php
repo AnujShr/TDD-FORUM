@@ -67,12 +67,11 @@ class ParticipateInForm extends TestCase
 
         $thread = create('App\Thread');
         $reply = make('App\Reply', [
-            'body' => 'Yahoo Customer Support'
+            'body' => 'fuck'
         ]);
 
-        $this->expectException(\Exception::class);
 
-        $this->post($thread->path() . '/replies', $reply->toArray());
+        $this->post($thread->path() . '/replies', $reply->toArray())->assertStatus(422);
     }
 
 

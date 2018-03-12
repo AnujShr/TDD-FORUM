@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <div class="card-footer level" v-if ="canUpdate">
+        <div class="card-footer level" v-if="canUpdate">
             <button class="btn btn-outline-info btn-xs mr-1" @click="editing = true">Edit</button>
             <button class="btn btn-outline-danger btn-xs mr-1" @click="destroy">DELETE</button>
         </div>
@@ -47,7 +47,7 @@
                 body: this.data.body
             };
         },
-        computed:{
+        computed: {
             signedIn(){
                 return window.App.signedIn;
             },
@@ -62,6 +62,8 @@
             update(){
                 axios.patch('/replies/' + this.data.id, {
                     body: this.body
+                }).catch(error => {
+                    flash(error.response.data, 'danger')
                 });
                 this.editing = false;
                 flash('Updated!');
