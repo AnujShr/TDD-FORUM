@@ -26,9 +26,9 @@ class ReplyController extends Controller
 
     public function store($channelId, Thread $thread, CreatePostRequest $form)
     {
-        if (Gate::denies('create', new Reply)) {
-            return response('Too fast slow down a bit', 422);
-        }
+//        if (Gate::denies('create', new Reply)) {
+//            return response('Too fast slow down a bit', 422);
+//        }
 
         return $thread->addReply(['body' => request('body'), 'user_id' => auth()->id()])->load('owner');
     }
