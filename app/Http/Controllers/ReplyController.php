@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePostRequest;
+use App\Notifications\YouWereMentioned;
 use App\Reply;
 use App\Rules\SpamFree;
+use App\User;
 use Illuminate\Http\Request;
 use App\Thread;
 use Illuminate\Support\Facades\Gate;
@@ -26,11 +28,20 @@ class ReplyController extends Controller
 
     public function store($channelId, Thread $thread, CreatePostRequest $form)
     {
-//        if (Gate::denies('create', new Reply)) {
-//            return response('Too fast slow down a bit', 422);
-//        }
+            //check in formrequest
 
-        return $thread->addReply(['body' => request('body'), 'user_id' => auth()->id()])->load('owner');
+        $reply = $thread->addReply(['body' => request('body'), 'user_id' => auth()->id()]);
+
+        preg_match_all('/\@([^\s\.]+)/',$reply->body,$matches);
+
+        foreach($matches[1] as $name){
+            $user = User::whereName($name)->first();
+            if($user){
+                $user->notify(new YouWereMentioned($reply));
+            }
+        }
+
+        return $reply ->load('owner');
     }
 
     public function update(Reply $reply)
