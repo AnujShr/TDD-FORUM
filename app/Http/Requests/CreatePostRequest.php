@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\SpamFree;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreatePostRequest extends FormRequest
@@ -13,7 +14,7 @@ class CreatePostRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,8 @@ class CreatePostRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'body' => ['required', new SpamFree],
+
         ];
     }
 }

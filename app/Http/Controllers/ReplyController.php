@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostRequest;
 use App\Reply;
 use App\Rules\SpamFree;
 use Illuminate\Http\Request;
@@ -23,19 +24,13 @@ class ReplyController extends Controller
         return $thread->replies()->paginate(5);
     }
 
-    public function store($channelId, Thread $thread)
+    public function store($channelId, Thread $thread, CreatePostRequest $form)
     {
         if (Gate::denies('create', new Reply)) {
             return response('Too fast slow down a bit', 422);
         }
-        try {
-            request()->validate(['body' => ['required', new SpamFree]]);
-            $reply = $thread->addReply(['body' => request('body'), 'user_id' => auth()->id()]);
-        } catch (\Exception $e) {
-            return response('Sorry, your reply could not be save at this time.', 422);
-        }
 
-        return $reply->load('owner');
+        return $thread->addReply(['body' => request('body'), 'user_id' => auth()->id()])->load('owner');
     }
 
     public function update(Reply $reply)

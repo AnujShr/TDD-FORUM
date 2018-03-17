@@ -63,7 +63,7 @@ class ParticipateInForm extends TestCase
 
     function test_replies_that_contain_spam_may_not_be_created()
     {
-        $this->signIn();
+        $this->withExceptionHandling()->signIn();
 
         $thread = create('App\Thread');
         $reply = make('App\Reply', ['body' => 'fuck']);

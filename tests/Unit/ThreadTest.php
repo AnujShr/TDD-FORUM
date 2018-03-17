@@ -28,6 +28,12 @@ class ThreadTest extends TestCase
     /**
      *Thread has a user associated with it
      */
+    public function test_guests_cannot_see_create_thread_form()
+    {
+        $this->withExceptionHandling()
+            ->get('/threads/create')
+            ->assertRedirect('/login');
+    }
     public function test_thread_has_a_creator()
     {
         $this->assertInstanceOf('App\User', $this->thread->creator);
