@@ -62,7 +62,7 @@ class ThreadController extends Controller
     {
         $threads = Thread::filter($filter)->latest();
         if ($channel->exists) $threads->where('channel_id', $channel->id);
-        $threads = $threads->get();
+        $threads = $threads->paginate(20);
         return $threads;
     }
 

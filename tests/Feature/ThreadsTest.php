@@ -66,15 +66,14 @@ class ThreadsTest extends TestCase
         $this->get('threads/?by=John Doe')->assertSee($threadByJohn->title)->assertDontSee($threadNotByJohn->title);
     }
 
-    function test_can_filter_by_answered()
+    function test_can_filter_by_unanswered()
     {
         $thread = create('App\Thread');
         create('App\Reply', ['thread_id' => $thread->id]);
 
         $response = $this->getJson('threads?unanswered=1')->json();
-        $this->assertCount(1, $response);
+        $this->assertCount(1, $response['data']);
     }
-
     function test_user_can_filter_thread_by_popular()
     {
         $threadwithTwoReplies = create('App\Thread');
@@ -87,7 +86,7 @@ class ThreadsTest extends TestCase
 
         $response = $this->getJson('threads/?popular=1')->json();
 
-        $this->assertEquals([3, 2, 0], array_column($response, 'replies_count'));
+        $this->assertEquals([3, 2, 0], array_column($response['data'], 'replies_count'));
     }
 
     function test_user_can_request_all_replies_for_a_given_thread()

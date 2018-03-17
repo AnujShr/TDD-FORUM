@@ -11,6 +11,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
     <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
     <script>
         window.App = {!!  json_encode([
@@ -18,29 +19,30 @@
         'signedIn' => Auth::check()
          ])!!};
     </script>
+    <style>
+        body {
+            padding-bottom: 100px;
+        }
+
+        .level {
+            display: flex;
+            align-items: center;
+        }
+
+        .flex {
+            flex: 1;
+        }
+
+        .mr-1 {
+            margin-right: 1px;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+    @yield('header')
 </head>
-<style>
-    body {
-        padding-bottom: 100px;
-    }
-
-    .level {
-        display: flex;
-        align-items: center;
-    }
-
-    .flex {
-        flex: 1;
-    }
-
-    .mr-1 {
-        margin-right: 1px;
-    }
-
-    [v-cloak] {
-        display: none;
-    }
-</style>
 <body>
 <div id="app">
     @include('layouts.nav')

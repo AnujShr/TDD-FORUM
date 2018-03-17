@@ -36,7 +36,7 @@
 </template>
 
 <script>
-    import Favorites from './FavoriteComponent.vue'
+    import Favorites from './FavoriteComponent.vue';
     import moment from 'moment';
     export default{
         props: ['data'],
@@ -59,6 +59,7 @@
                 return moment(this.data.created_at).fromNow();
             }
         },
+
         methods: {
             update(){
                 axios.patch('/replies/' + this.data.id, {
