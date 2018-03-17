@@ -16,12 +16,6 @@ class ThreadController extends Controller
         $this->middleware('auth')->except(['index', 'show']);
     }
 
-    /**
-     * @param Channel $channel
-     * @param ThreadFilter $filter
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @internal param null $channelSlug
-     */
     public function index(Channel $channel, ThreadFilter $filter)
     {
         $threads = $this->getThreads($channel, $filter);
@@ -37,12 +31,6 @@ class ThreadController extends Controller
         return view('threads.create');
     }
 
-    /**
-     * @param $channel
-     * @param Thread $thread
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @internal param $channel_id
-     */
     public function show($channel, Thread $thread)
     {
         if (auth()->check()) {
@@ -53,7 +41,7 @@ class ThreadController extends Controller
 
     public function store()
     {
-        request()->validate(['title' => ['required',new SpamFree], 'channel_id' => 'required|exists:channels,id', 'body' => ['required',new SpamFree]]);
+        request()->validate(['title' => ['required', new SpamFree], 'channel_id' => 'required|exists:channels,id', 'body' => ['required', new SpamFree]]);
 //        $this->validate(request(), ['title' => 'required|spamfree', 'channel_id' => 'required|exists:channels,id', 'body' => 'required|spamfree']);
 
         $thread = Thread::create(['user_id' => auth()->id(), 'channel_id' => request('channel_id'), 'title' => request('title'), 'body' => request('body')]);
@@ -72,12 +60,6 @@ class ThreadController extends Controller
             return redirect('/threads');
     }
 
-
-    /**
-     * @param Channel $channel
-     * @param ThreadFilter $filter
-     * @return mixed
-     */
     public function getThreads(Channel $channel, ThreadFilter $filter)
     {
         $threads = Thread::filter($filter)->latest();

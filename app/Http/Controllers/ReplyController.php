@@ -6,12 +6,11 @@ use App\Reply;
 use App\Rules\SpamFree;
 use Illuminate\Http\Request;
 use App\Thread;
+use Illuminate\Support\Facades\Gate;
 
 class ReplyController extends Controller
 {
-    /**
-     * @param Thread $thread
-     */
+
 
     public function __construct()
     {
@@ -24,20 +23,18 @@ class ReplyController extends Controller
         return $thread->replies()->paginate(5);
     }
 
-    /**
-     * @param $channelId
-     * @param Thread $thread
-     * @return \Illuminate\Http\RedirectResponse
-     * @internal param Request $request
-     */
     public function store($channelId, Thread $thread)
     {
+        if (Gate::denies('create', new Reply)) {
+            return response('Too fast slow down a bit', 422);
+        }
         try {
-            request()->validate(['body' => ['required',new SpamFree]]);
+            request()->validate(['body' => ['required', new SpamFree]]);
             $reply = $thread->addReply(['body' => request('body'), 'user_id' => auth()->id()]);
         } catch (\Exception $e) {
             return response('Sorry, your reply could not be save at this time.', 422);
         }
+
         return $reply->load('owner');
     }
 
@@ -45,7 +42,7 @@ class ReplyController extends Controller
     {
         $this->authorize('update', $reply);
         try {
-            request()->validate(['body' => ['required',new SpamFree]]);
+            request()->validate(['body' => ['required', new SpamFree]]);
             $reply->update(request((['body'])));
         } catch (\Exception $e) {
             return response('Sorry, your reply could not be save at this time.', 422);

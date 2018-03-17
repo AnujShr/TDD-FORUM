@@ -12,7 +12,9 @@ class InvalidKeywords
          * @var array
          */
         protected $keywords = [
-                'fuck'
+                'fuck',
+                'bastard',
+                '100% Satisfied',
             ];
 
     /**

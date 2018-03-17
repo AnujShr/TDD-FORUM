@@ -66,10 +66,20 @@ class ParticipateInForm extends TestCase
         $this->signIn();
 
         $thread = create('App\Thread');
-        $reply = make('App\Reply', [
-            'body' => 'fuck'
-        ]);
+        $reply = make('App\Reply', ['body' => 'fuck']);
 
+
+        $this->post($thread->path() . '/replies', $reply->toArray())->assertStatus(422);
+    }
+
+    function test_users_may_only_reply_a_maximum_of_once_per_minute()
+    {
+        $this->signIn();
+
+        $thread = create('App\Thread');
+        $reply = make('App\Reply',['body' => 'My simple reply.']);
+
+        $this->post($thread->path() . '/replies', $reply->toArray())->assertStatus(201);
 
         $this->post($thread->path() . '/replies', $reply->toArray())->assertStatus(422);
     }
