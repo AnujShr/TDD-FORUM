@@ -12,7 +12,6 @@ class ThreadController extends Controller
 {
     public function __construct()
     {
-//        $this->middleware('auth')->only('store');
         $this->middleware('auth')->except(['index', 'show']);
     }
 
@@ -42,7 +41,6 @@ class ThreadController extends Controller
     public function store()
     {
         request()->validate(['title' => ['required', new SpamFree], 'channel_id' => 'required|exists:channels,id', 'body' => ['required', new SpamFree]]);
-//        $this->validate(request(), ['title' => 'required|spamfree', 'channel_id' => 'required|exists:channels,id', 'body' => 'required|spamfree']);
 
         $thread = Thread::create(['user_id' => auth()->id(), 'channel_id' => request('channel_id'), 'title' => request('title'), 'body' => request('body')]);
 
@@ -56,8 +54,8 @@ class ThreadController extends Controller
             abort(403, 'YOU DO NOT HAVE PERMISSION ');
         }
         $thread->delete();
-        if (request()->wantsJson()) return response([], 204); else
-            return redirect('/threads');
+        if (request()->wantsJson()) return response([], 204);
+        else return redirect('/threads');
     }
 
     public function getThreads(Channel $channel, ThreadFilter $filter)

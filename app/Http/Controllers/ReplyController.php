@@ -24,21 +24,18 @@ class ReplyController extends Controller
 
     public function store($channelId, Thread $thread, CreatePostRequest $form)
     {
-            //check in formrequest
+            //check authorize in formrequest
 
         return $thread->addReply(['body' => request('body'), 'user_id' => auth()->id()])->load('owner');
     }
 
     public function update(Reply $reply)
     {
-        $this->authorize('update', $reply);
-        try {
+            $this->authorize('update', $reply);
+
             request()->validate(['body' => ['required', new SpamFree]]);
             $reply->update(request((['body'])));
-        } catch (\Exception $e) {
-            return response('Sorry, your reply could not be save at this time.', 422);
 
-        }
     }
 
     public function destroy(Reply $reply)
@@ -50,6 +47,5 @@ class ReplyController extends Controller
         }
         return back();
     }
-
 
 }
