@@ -3,6 +3,6 @@
         {{$profileUser->name}} replited to <a href="{{$activity->subject->thread->path()}}"> {{$activity->subject->thread->title}}
     @endslot
     @slot('body')
-        {{$activity->subject->body}}
+        {!!$activity->subject->body!!}
     @endslot
 @endcomponent

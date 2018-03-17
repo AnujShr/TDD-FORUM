@@ -3,6 +3,6 @@
         {{$profileUser->name}} created<a href="{{$activity->subject->path()}}"> {{$activity->subject->title}}
     @endslot
     @slot('body')
-        {{$activity->subject->body}}
+        {!! $activity->subject->body !!}
     @endslot
 @endcomponent

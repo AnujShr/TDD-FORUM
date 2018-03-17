@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Reply;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -32,10 +33,17 @@ class ReplyTest extends TestCase
 
     function test_can_detect_all_mentioned_user_in_reply()
     {
-     $reply = create('App\Reply',[
+     $reply = new Reply([
          'body' => '@JaneDoe wants to talk to @JohnDoe'
      ]);
      $this->assertEquals(['JaneDoe','JohnDoe'], $reply->mentionedUsers());
     }
+
+    function test_wraps_mention_usernames_in_the_body_within_anchor_tags()
+    {
+        $reply = new Reply(['body' => 'Hello @JaneDoe.']);
+            $this->assertEquals('Hello <a href="/profiles/JaneDoe">@JaneDoe</a>.', $reply->body);
+    }
+    
      
 }

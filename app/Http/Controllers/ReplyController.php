@@ -19,7 +19,7 @@ class ReplyController extends Controller
 
     public function index($channelId, Thread $thread)
     {
-        return $thread->replies()->paginate(5);
+        return $thread->replies()->latest()->paginate(5);
     }
 
     public function store($channelId, Thread $thread, CreatePostRequest $form)
