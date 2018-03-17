@@ -3,13 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePostRequest;
-use App\Notifications\YouWereMentioned;
 use App\Reply;
 use App\Rules\SpamFree;
-use App\User;
-use Illuminate\Http\Request;
 use App\Thread;
-use Illuminate\Support\Facades\Gate;
 
 class ReplyController extends Controller
 {
@@ -30,18 +26,7 @@ class ReplyController extends Controller
     {
             //check in formrequest
 
-        $reply = $thread->addReply(['body' => request('body'), 'user_id' => auth()->id()]);
-
-        preg_match_all('/\@([^\s\.]+)/',$reply->body,$matches);
-
-        foreach($matches[1] as $name){
-            $user = User::whereName($name)->first();
-            if($user){
-                $user->notify(new YouWereMentioned($reply));
-            }
-        }
-
-        return $reply ->load('owner');
+        return $thread->addReply(['body' => request('body'), 'user_id' => auth()->id()])->load('owner');
     }
 
     public function update(Reply $reply)
