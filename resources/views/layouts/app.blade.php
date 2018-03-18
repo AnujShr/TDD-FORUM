@@ -37,6 +37,10 @@
             margin-right: 1px;
         }
 
+        .mr-3 {
+            margin-right: 3px;
+        }
+
         [v-cloak] {
             display: none;
         }

@@ -15,18 +15,15 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password','avatar_path'
-    ];
+    protected $fillable = ['name', 'email', 'password', 'avatar_path'];
 
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = [
-        'password', 'remember_token', 'email'
-    ];
+    protected $hidden = ['password', 'remember_token', 'email'];
+
     public function getRouteKeyName()
     {
         return 'name';
@@ -44,10 +41,7 @@ class User extends Authenticatable
 
     public function read($thread)
     {
-        cache()->forever(
-            $this->visitedThreadCacheKey($thread),
-            Carbon::now()
-        );
+        cache()->forever($this->visitedThreadCacheKey($thread), Carbon::now());
     }
 
     /**
@@ -58,17 +52,25 @@ class User extends Authenticatable
      */
     public function visitedThreadCacheKey($thread)
     {
-            return sprintf("users.%s.visits.%s", $this->id, $thread->id);
+        return sprintf("users.%s.visits.%s", $this->id, $thread->id);
 
     }
+
     /**
-         * Fetch the last published reply for the user.
-         *
-         * @return \Illuminate\Database\Eloquent\Relations\HasOne
-         */
+     * Fetch the last published reply for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function lastReply()
     {
         return $this->hasOne(Reply::class)->latest();
     }
 
+    public function getAvatarPathAttribute($avatar)
+    {
+        if (!$avatar) {
+            return asset('images/default-avatar.png');
+        }
+        return asset('storage/' . $avatar);
+    }
 }
