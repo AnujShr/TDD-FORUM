@@ -10,6 +10,7 @@ Few Basic Requirements
 ```
 *PHP v.7 or higher
 *Mysql v5.7 or higher
+*Redis v3.* or higher 
 *Vue 2.0 or higher
 ```
 
@@ -21,8 +22,9 @@ Few Basic Requirements
 -CD project-name
 -composer install
 -npm install
+-npm run dev
 -Create a database and inform .env
--Run php artisan migrate to create tables
+-php artisan migrate
 
 
 ```
@@ -38,10 +40,11 @@ Use a localhost and create a vhost to deploy since it is just created as a learn
 * [Laravel](https://laravel.com/) - The PHP Framework For Web Artisans
 * [Composer](https://github.com/composer/composer) - Dependency Manager for PHP
 * [Bootstrap](https://github.com/twbs/bootstrap) - Sleek, intuitive,powerful front-end framework for faster and easier web development.
+* [Redis](https://redis.io/) -Redis is an open source (BSD licensed), in-memory data structure store, used as a database, cache and message broker.
 * In built Vue and Axio availabe from laravel
 
 ## Versioning
-Have Not used one(Well need to learn about it first and if learned might use in this project in future) 
+[Github](https://github.com) - GitHub is a web-based hosting service for version control using git.
 
 ## Authors
 
