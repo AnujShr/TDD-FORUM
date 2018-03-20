@@ -1,6 +1,6 @@
 @forelse($threads as $thread)
     <div class="card">
-        <div class="card-header">
+        <h4 class="card-header">
             <div class="level">
                 <div class="flex">
                     <h4>
@@ -15,17 +15,21 @@
                         </a>
 
                     </h4>
-                    <h5>Posted by:<a href="{{route('profile',$thread->creator) }}">{{$thread->creator->name}} </a></h5>
+                    <h5>Posted by:<a href="{{route('profile',$thread->creator) }}" class="card-link">{{$thread->creator->name}} </a>
+                    </h5>
                 </div>
-
-                <a href="{{$thread->path()}}">
+                <a href="{{$thread->path()}}" class="card-link">
                     <strong>{{$thread->replies_count}} {{str_plural('reply',$thread->replies_count)}}</strong>
                 </a>
             </div>
-        </div>
+        </h4>
+
         <div class="card-body">
-            <div class="body">{{$thread->body}}</div>
+            <p class="card-text">{{$thread->body}}</p>
         </div>
+    </div>
+    <div class="card-footer">
+        Visits: {{$thread->visits()}}
     </div>
     <br>
 @empty

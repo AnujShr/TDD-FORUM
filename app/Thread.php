@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-    use RecordActivity;
+    use RecordActivity, RecordVisits;
     protected $guarded = [];
     protected $with = ['creator', 'channel'];
     protected $appends = ['isSubscribedTo'];
@@ -91,4 +91,6 @@ class Thread extends Model
         $key = $user->visitedThreadCacheKey($this);
         return $this->updated_at > cache($key);
     }
+
+
 }

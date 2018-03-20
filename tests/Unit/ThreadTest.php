@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Support\Facades\Redis;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -17,6 +18,7 @@ class ThreadTest extends TestCase
      *
      */
     protected $thread;
+
     public function setUp()
     {
         parent::setUp();
@@ -30,10 +32,9 @@ class ThreadTest extends TestCase
      */
     public function test_guests_cannot_see_create_thread_form()
     {
-        $this->withExceptionHandling()
-            ->get('/threads/create')
-            ->assertRedirect('/login');
+        $this->withExceptionHandling()->get('/threads/create')->assertRedirect('/login');
     }
+
     public function test_thread_has_a_creator()
     {
         $this->assertInstanceOf('App\User', $this->thread->creator);
@@ -51,14 +52,15 @@ class ThreadTest extends TestCase
     public function test_thread_can_add_reply()
     {
         $this->thread->addReply(['body' => 'Foobar', 'user_id' => 1]);
-        $this->assertCount(1,$this->thread->replies);
+        $this->assertCount(1, $this->thread->replies);
     }
 
     public function test_a_thread_belongs_to_channel()
     {
         $thread = create('App\Thread');
-        $this->assertInstanceOf('App\Channel',$thread->channel);
+        $this->assertInstanceOf('App\Channel', $thread->channel);
     }
+
     function test_a_thread_can_be_subscribed_to()
     {
         $thread = create('App\Thread');
@@ -74,18 +76,36 @@ class ThreadTest extends TestCase
 
         $this->assertCount(0, $thread->subscriptions);
     }
+
     function test_thread_can_check_if_the_authenticated_user_has_read_all_replies()
     {
-      $this->signIn();
+        $this->signIn();
 
-      $thread = create('App\Thread');
+        $thread = create('App\Thread');
 
-      tap(auth()->user(), function ($user) use ($thread) {
-          $this->assertTrue($thread->hasUpdatesFor($user));
+        tap(auth()->user(), function ($user) use ($thread) {
+            $this->assertTrue($thread->hasUpdatesFor($user));
 
-          $user->read($thread);
+            $user->read($thread);
 
-          $this->assertFalse($thread->hasUpdatesFor($user));
-      });
-  }
+            $this->assertFalse($thread->hasUpdatesFor($user));
+        });
+    }
+
+    function test_thread_records_visit_counts()
+    {
+        $thread = make('App\Thread', ['id' => 1]);
+
+        $thread->resetVisits();
+        $this->assertSame(0, $thread->visits());
+
+        //1st Vist
+        $thread->recordVisit();
+        $this->assertEquals(1, $thread->visits());
+
+        //2nd Vist
+        $thread->recordVisit();
+        $this->assertEquals(2, $thread->visits());
+
+    }
 }

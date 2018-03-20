@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Channel;
-//use App\User;
 use App\Filters\ThreadFilter;
 use App\Rules\SpamFree;
 use App\Thread;
+use App\Trending;
+use Illuminate\Support\Facades\Redis;
 
 class ThreadController extends Controller
 {
@@ -15,14 +16,16 @@ class ThreadController extends Controller
         $this->middleware('auth')->except(['index', 'show']);
     }
 
-    public function index(Channel $channel, ThreadFilter $filter)
+    public function index(Channel $channel, ThreadFilter $filter, Trending $trending)
     {
         $threads = $this->getThreads($channel, $filter);
 
         if (request()->wantsJson()) {
             return $threads;
         }
-        return view('threads.index', compact('threads'));
+
+        return view('threads.index', ['threads' => $threads, 'trending' => $trending->get()]);
+
     }
 
     public function create()
@@ -30,11 +33,13 @@ class ThreadController extends Controller
         return view('threads.create');
     }
 
-    public function show($channel, Thread $thread)
+    public function show($channel, Thread $thread, Trending $trending)
     {
         if (auth()->check()) {
             auth()->user()->read($thread);
         }
+        $trending->push($thread);
+        $thread->recordVisit();
         return view('threads.show', compact('thread'));
     }
 
@@ -54,8 +59,7 @@ class ThreadController extends Controller
             abort(403, 'YOU DO NOT HAVE PERMISSION ');
         }
         $thread->delete();
-        if (request()->wantsJson()) return response([], 204);
-        else return redirect('/threads');
+        if (request()->wantsJson()) return response([], 204); else return redirect('/threads');
     }
 
     public function getThreads(Channel $channel, ThreadFilter $filter)
