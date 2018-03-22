@@ -63,6 +63,16 @@ class CreateThreadTest extends TestCase
 //
 //
 //    }
+    function test_users_must_confirm_their_email_address_before_creating_threads()
+    {
+        $this->publishThread()->assertRedirect('/threads')->assertSessionHas('flash', 'You must first confirm email address');
+    }
 
+    protected function publishThread($overrides = [])
+    {
+        $this->withExceptionHandling()->signIn();
+        $thread = make('App\Thread', $overrides);
+        return $this->post('/threads', $thread->toArray());
+    }
 }
 
