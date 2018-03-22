@@ -15,7 +15,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password', 'avatar_path'];
+    protected $fillable = ['name', 'email', 'password','confirmed', 'avatar_path','confirmation_token'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -23,6 +23,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = ['password', 'remember_token', 'email'];
+    protected $casts = [
+        'confirmed' => 'boolean'
+    ];
 
     public function getRouteKeyName()
     {
