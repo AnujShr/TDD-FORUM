@@ -1,6 +1,15 @@
 # Forum 
 
-A Simple Forum Website developed using Laravel with test driven. 
+## A Forum Website with all the goodies developed using Laravel with test driven.(Just created for learning not official or anything)
+
+### The website is fully developed with laravel with the use of Vue.js and redis with lots of awesome test features.
+⋅⋅* Has vue.js reply component with favorite option.
+⋅⋅* Need to confirm email address to begin posting.
+⋅⋅* Redis to generate trending threads and view count.
+⋅⋅* Has activity feed.
+⋅⋅* Can upload avatar.
+*More to come*
+
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project.
 
 ### Prerequisites
