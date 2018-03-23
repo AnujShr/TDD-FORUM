@@ -1,14 +1,15 @@
 # Forum 
 
-## A Forum Website with all the goodies developed using Laravel with test driven.(Just created for learning not official or anything)
+## A Forum Website with all the goodies developed using Laravel 5.6 with test driven.(Just created for learning not official or anything)
 
 ### The website is fully developed with laravel with the use of Vue.js and redis with lots of awesome test features.
-⋅⋅* Has vue.js reply component with favorite option.
-⋅⋅* Need to confirm email address to begin posting.
-⋅⋅* Redis to generate trending threads and view count.
-⋅⋅* Has activity feed.
-⋅⋅* Can upload avatar.
-*More to come*
+- Can upload avatar.
+- Has vue.js reply component with favorite option.
+- Need to confirm email address to begin posting.
+- Redis to generate trending threads and view count.
+- Has activity feed.
+     
+     *More to come*
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project.
 
@@ -16,27 +17,32 @@ These instructions will get you a copy of the project up and running on your loc
 
 Few Basic Requirements
 
-```
-*PHP v.7 or higher
-*Mysql v5.7 or higher
-*Redis v3.* or higher 
-*Vue 2.0 or higher
-```
+
+- [x] PHP v.7 or higher
+- [x] Mysql v5.7 or higher
+- [x] Redis v3.* or higher 
+- [x] Vue 2.0 or higher
+- [x] Laravel 5.6  *if interested to develop the project*
+
 
 ### Installing
    
    
-```
--git clone https://github.com/AnujShr/TDD-FORUM.git
--CD project-name
--composer install
--npm install
--npm run dev
--Create a database and inform .env
--php artisan migrate
+> git clone https://github.com/AnujShr/TDD-FORUM.git
+
+> CD project-name
+
+> composer install
+
+> npm install
+
+> npm run dev
+
+> Create a database and inform .env
+
+> php artisan migrate
 
 
-```
 By now you will get a database and a running project.
 
 
