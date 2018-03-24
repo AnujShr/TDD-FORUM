@@ -14,12 +14,12 @@
             </div>
             @if(count($trending))
                 <div class="col md-4">
-                    <div class="card">
+                    <div class="card border-primary">
                         <div class="card bg-primary text-white card-header">
                             Trending Threads
                         </div>
                         <div class="card-body">
-                            <ul class="list-group ">
+                            <ul class="list-group list-group-flush">
                                 @foreach($trending as $thread)
                                     <li class="list-group-item">
                                         <a href="{{$thread->path}}">

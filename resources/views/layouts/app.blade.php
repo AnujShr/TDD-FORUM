@@ -44,6 +44,13 @@
         [v-cloak] {
             display: none;
         }
+       .ml-a{
+            margin-left:auto;
+        }
+        a.user:link { color:#ffffff; text-decoration:none; font-weight:bolder; }
+        a.user:visited { color:#fff3cd ; text-decoration:none; font-weight:bolder; }
+        a.user:hover { color: #ffffff; text-decoration:underline; font-weight:bolder; }
+        a.user:active { color:#ffffff ; text-decoration:none; font-weight:bolder; }
     </style>
     @yield('header')
 </head>

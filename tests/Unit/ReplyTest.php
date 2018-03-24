@@ -44,6 +44,16 @@ class ReplyTest extends TestCase
         $reply = new Reply(['body' => 'Hello @JaneDoe.']);
             $this->assertEquals('Hello <a href="/profiles/JaneDoe">@JaneDoe</a>.', $reply->body);
     }
+
+    function test_knows_it_is_a_best_reply()
+    {
+        $reply = create('App\Reply');
+        $this->assertFalse($reply->isBest());
+        $reply->thread->update(['best_reply_id' => $reply->id ]);
+        $this->assertTrue($reply->fresh()->isBest());
+
+    }
+
     
      
 }

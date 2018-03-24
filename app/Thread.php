@@ -15,10 +15,10 @@ class Thread extends Model
     protected static function boot()
     {
         parent::boot();
-
-//        static::addGlobalScope('replyCount', function ($builder) {
-//            $builder->withCount('replies');
-//        });
+        static::created(function ($thread) {
+            $thread->title;
+            $thread->update(['slug'=> $thread->title]);
+        });
         static::deleting(function ($thread) {
             $thread->replies->each->delete();
         });
@@ -100,25 +100,14 @@ class Thread extends Model
     public function setSlugAttribute($value)
     {
         $slug = str_slug($value);
-        $original =$slug;
-        $count = 2;
-        while(static::whereSlug($slug)->exists()){
-            $slug ="{$original}-". $count++;
+        if (static::whereSlug($slug)->exists()) {
+            $slug = "{$slug}-" . $this->id;
         }
-//        return $slug;
-//        if (static::whereSlug($slug = str_slug($value))->exists()) {
-//            $slug = $this->incrementSlug($slug);
-//        }
         $this->attributes['slug'] = $slug;
     }
 
-    public function incrementSlug($slug)
+    public function markBestReply($reply)
     {
-        $original =$slug;
-        $count = 2;
-        while(static::whereSlug($slug)->exists()){
-           $slug ="{$original}-". $count++;
-        }
-        return $slug;
+       $this->update(['best_reply_id' => $reply->id]);
     }
 }

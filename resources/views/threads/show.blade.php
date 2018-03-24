@@ -37,7 +37,7 @@
 
                 </div>
                 <div class="col-md-4">
-                    <div class="card">
+                    <div class="card border-dark">
                         <div class="card-body">
                             <p>
                                 This Thread was publised {{$thread->created_at->diffForHumans()}}
