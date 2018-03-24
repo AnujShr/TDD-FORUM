@@ -49,7 +49,10 @@ class ThreadController extends Controller
 
         request()->validate(['title' => ['required', new SpamFree], 'channel_id' => 'required|exists:channels,id', 'body' => ['required', new SpamFree]]);
 
-        $thread = Thread::create(['user_id' => auth()->id(), 'channel_id' => request('channel_id'), 'title' => request('title'), 'body' => request('body')]);
+        $thread = Thread::create(['user_id' => auth()->id(), 'channel_id' => request('channel_id'),
+            'title' => request('title'),
+            'slug'=>request('title'),
+            'body' => request('body')]);
 
         return redirect($thread->path())->with('flash', 'Your Thread Has Been Published!!!');
     }

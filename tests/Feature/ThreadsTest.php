@@ -27,10 +27,10 @@ class ThreadsTest extends TestCase
     }
 
     /** Thread URL*/
-    public function test_a_can_make_a_string_path()
+    public function test_has_a_path()
     {
         $threadwithTwoReplies = create('App\Thread');
-        $this->assertEquals("/threads/{$threadwithTwoReplies->channel->slug}/{$threadwithTwoReplies->id}", $threadwithTwoReplies->path());
+        $this->assertEquals("/threads/{$threadwithTwoReplies->channel->slug}/{$threadwithTwoReplies->slug}", $threadwithTwoReplies->path());
     }
 
     /** All thread view */

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Thread;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,8 +19,6 @@ class CreateThreadTest extends TestCase
         $this->post(route('threads'), $thread->toArray());
     }
 
-// Too much of Need to remove  the custom if condiion in handler.php
-//
     public function test_guest_cannot_see_create_thread_forms()
     {
         $this->withExceptionHandling();
@@ -80,6 +79,23 @@ class CreateThreadTest extends TestCase
         $this->withExceptionHandling()->signIn();
         $thread = make('App\Thread', $overrides);
         return $this->post(route('threads'), $thread->toArray());
+    }
+
+    function test_slug_need_to_be_unique()
+    {
+        $this->signIn();
+        $thread = create('App\Thread',['title' => 'Foo Title', 'slug' => 'foo-title']);
+        $this->assertEquclsals($thread->fresh()->slug,'foo-title');
+        $this->post(route('threads'),$thread->toArray());
+        $this->assertTrue(Thread::whereSlug('foo-title-2')->exists());
+    }
+
+    function test_thread_with_a_number_title()
+    {
+        $this->signIn();
+        $thread = create('App\Thread',['title' => 'Some Title 24', 'slug' => 'some-title-24']);
+        $this->post(route('threads',$thread->toArray()));
+        $this->assertTrue(Thread::whereSlug('some-title-24-2')->exists());
     }
 }
 
