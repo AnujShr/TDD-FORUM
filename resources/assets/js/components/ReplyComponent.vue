@@ -50,7 +50,7 @@
                 id: this.data.id,
                 body: this.data.body,
                 isBest: false,
-                reply:this.data
+                reply: this.data
             };
         },
         computed: {
@@ -78,6 +78,7 @@
             },
             markBestReply(){
                 this.isBest = true;
+                axios.post('/replies/'+this.data.id +'/best');
             }
         }
     }

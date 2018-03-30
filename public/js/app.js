@@ -63205,7 +63205,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 var user = window.App.user;
 module.exports = {
     updateReply: function updateReply(reply) {
-        return reply.user.id === user.id;
+        return reply.user_id === user.id;
     }
 };
 
@@ -64404,6 +64404,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         markBestReply: function markBestReply() {
             this.isBest = true;
+            axios.post('/replies/' + this.data.id + '/best');
         }
     }
 });
