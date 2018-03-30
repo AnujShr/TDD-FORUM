@@ -49,7 +49,7 @@
                 editing: false,
                 id: this.data.id,
                 body: this.data.body,
-                isBest: this.data.isBest,
+                isBest: false,
                 reply: this.data
             };
         },
@@ -60,7 +60,7 @@
         },
         created(){
             window.events.$on('best-reply-selected', id => {
-            this.isBest =(id === this.id);
+            this.isBest = (id === this.id);
             });
         },
         methods: {

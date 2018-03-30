@@ -64374,7 +64374,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             editing: false,
             id: this.data.id,
             body: this.data.body,
-            isBest: this.data.isBest,
+            isBest: false,
             reply: this.data
         };
     },

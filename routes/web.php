@@ -32,7 +32,7 @@ Route::post('/threads/{channel}/{thread}/replies', 'ReplyController@store');
 Route::post('/replies/{reply}/favorites', 'FavoriteController@store');
 Route::delete('/replies/{reply}/favorites', 'FavoriteController@destroy');
 Route::patch('/replies/{reply}', 'ReplyController@update');
-Route::delete('/replies/{reply}', 'ReplyController@destroy');
+Route::delete('/replies/{reply}', 'ReplyController@destroy')->name('replies.destroy');
 Route::post('replies/{reply}/best','BestReplyController@store')->name('best-replies.store');
 Route::get('/profiles/{user}', 'ProfileController@show')->name('profile');
 Route::post('/threads/{channel}/{thread}/subscriptions','ThreadsSubscribeController@store');
