@@ -5,7 +5,10 @@
             <reply :reply="reply" @deleted="remove(index)"></reply>
         </div>
          <paginator :dataSet="dataSet" @changed="fetch"></paginator>
-        <new-reply @created="add"></new-reply>
+        <p v-if="$parent.locked">
+            <b><i>This thread has been locked. No more replies are allowed anymore.</i></b>
+        </p>
+        <new-reply @created="add" v-else></new-reply>
     </div>
 </template>
 

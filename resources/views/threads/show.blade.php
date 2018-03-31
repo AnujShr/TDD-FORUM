@@ -5,15 +5,15 @@
 @endsection
 @section('content')
     {{--Thread Section--}}
-    <thread-view :initial-replies-count="{{$thread->replies_count}}" inline-template>
+    <thread-view :thread="{{$thread}}" inline-template>
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-header">
                             <div class="level">
-                                    <img src="{{$thread->creator->avatar_path}}" alt="" width="50"
-                                         height="50" class="mr-3">
+                                <img src="{{$thread->creator->avatar_path}}" alt="" width="50"
+                                     height="50" class="mr-3">
                                 <h4 class="flex">
                                     <a href="{{route('profile',$thread->creator)}}">
                                         {{$thread->creator->name}}
@@ -48,7 +48,11 @@
                             </p>
 
                             <p>
-                                <subscribe-button :active="{{json_encode($thread->isSubscribedTo)}}"></subscribe-button>
+                                <subscribe-button :active="{{json_encode($thread->isSubscribedTo)}}"
+                                                  v-if="signedIn"></subscribe-button>
+                                <button class="btn btn-default" v-if="authorize('isAdmin')" @click="togglelock"
+                                        v-text="locked ? 'Unlock':  'Lock'">
+                                </button>
                             </p>
                         </div>
                     </div>

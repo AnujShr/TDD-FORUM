@@ -18,6 +18,7 @@ class Administrator
         if (auth()->check() && auth()->user()->isAdmin()) {
             return $next($request);
         }
-        return redirect(route('threads'));
+        abort(403,'You do not have permission');
+//        return redirect(route('threads'));
     }
 }
