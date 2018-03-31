@@ -76,4 +76,9 @@ class User extends Authenticatable
         }
         return asset('storage/' . $avatar);
     }
+
+    public function isAdmin()
+    {
+        return in_array($this->name,['JohnDoe']);
+    }
 }

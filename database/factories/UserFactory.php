@@ -15,6 +15,10 @@ $factory->state(App\User::class, 'unconfirmed', function () {
     return ['confirmed' => false];
 });
 
+$factory->state(App\User::class, 'administrator', function () {
+    return ['name' => 'JohnDoe'];
+});
+
 $factory->define(App\Thread::class, function (Faker $faker) {
     $title = $faker->sentence;
     return [
@@ -26,7 +30,8 @@ $factory->define(App\Thread::class, function (Faker $faker) {
     },
         'title' => $title,
         'body' => $faker->paragraph,
-        'slug' =>str_slug($title)]
+        'slug' =>str_slug($title),
+        'locked' => false]
     ;
 });
 

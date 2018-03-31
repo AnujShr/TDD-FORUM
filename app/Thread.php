@@ -17,7 +17,7 @@ class Thread extends Model
         parent::boot();
         static::created(function ($thread) {
             $thread->title;
-            $thread->update(['slug'=> $thread->title]);
+            $thread->update(['slug' => $thread->title]);
         });
         static::deleting(function ($thread) {
             $thread->replies->each->delete();
@@ -108,6 +108,11 @@ class Thread extends Model
 
     public function markBestReply($reply)
     {
-       $this->update(['best_reply_id' => $reply->id]);
+        $this->update(['best_reply_id' => $reply->id]);
+    }
+
+    public function lock()
+    {
+        $this->update(['locked' => true]);
     }
 }
