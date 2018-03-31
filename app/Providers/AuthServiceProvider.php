@@ -25,10 +25,6 @@ class AuthServiceProvider extends ServiceProvider
             if ($user->isAdmin()) {
                 return true;
             }
-            else{
-                return false;
-            }
-
         });
         $this->registerPolicies();
     }
