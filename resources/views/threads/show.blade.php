@@ -23,7 +23,7 @@
                                     <form action="{{$thread->path()}}" method="POST">
                                         {{csrf_field()}}
                                         {{method_field('DELETE')}}
-                                        <button type="submit" class="btn btn-primary btn-xs">Delete Thread</button>
+                                        <button type="submit" class="btn btn-link"><i class="fa fa-trash-alt"></i> </button>
                                     </form>
                                 @endcan
                             </div>
@@ -48,11 +48,18 @@
                             </p>
 
                             <p>
-                                <subscribe-button :active="{{json_encode($thread->isSubscribedTo)}}"
-                                                  v-if="signedIn"></subscribe-button>
-                                <button class="btn btn-default" v-if="authorize('isAdmin')" @click="togglelock"
-                                        v-text="locked ? 'Unlock':  'Lock'">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <subscribe-button :active="{{json_encode($thread->isSubscribedTo)}}"
+                                                      v-if="signedIn"></subscribe-button>
+                                </div>
+                                <div class="col-md-4">
+                                    <button :class="locked?'btn btn-info':'btn btn-outline-danger'" v-if="authorize('isAdmin')" @click="togglelock">
+                                        <span v-text="locked ? ' Unlock ':  ' Lock '"></span><i :class="locked?'fas fa-unlock':'fas fa-lock'"></i>
+
+                                </div>
                                 </button>
+                            </div>
                             </p>
                         </div>
                     </div>

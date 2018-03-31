@@ -8,7 +8,8 @@
 - Need to confirm email address to begin posting.
 - Redis to generate trending threads and view count.
 - Has activity feed.
-     
+- Recaptcha verification to post thread
+
      *More to come*
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project.
@@ -23,6 +24,9 @@ Few Basic Requirements
 - [x] Redis v3.* or higher 
 - [x] Vue 2.0 or higher
 - [x] Laravel 5.6  *if interested to develop the project*
+- [x] Node environment *if intrested to develop the project
+- [x] ReCaptcha key from google
+
 
 
 ### Installing
@@ -38,7 +42,11 @@ Few Basic Requirements
 
 > npm run dev
 
-> Create a database and inform .env
+> Create a database and update .env file
+
+> get Recaptcha key from google
+
+> Add RECAPTCHA_SECRET=key_from_google on .env file
 
 > php artisan migrate
 

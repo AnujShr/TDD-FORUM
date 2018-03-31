@@ -67004,9 +67004,9 @@ var render = function() {
       class: _vm.active ? "fa-check-square" : "fa-square"
     }),
     _vm._v(" "),
-    _vm.active
-      ? _c("span", [_vm._v("Subscribed")])
-      : _c("span", [_vm._v("Subscribe")])
+    _c("span", {
+      domProps: { textContent: _vm._s(_vm.active ? "Subscribed" : "Subscribe") }
+    })
   ])
 }
 var staticRenderFns = []

@@ -7,6 +7,7 @@ use App\Filters\ThreadFilter;
 use App\Rules\SpamFree;
 use App\Thread;
 use App\Trending;
+use Zttp\Zttp;
 
 class ThreadController extends Controller
 {
@@ -45,7 +46,10 @@ class ThreadController extends Controller
     public function store()
     {
         request()->validate(['title' => ['required', new SpamFree], 'channel_id' => 'required|exists:channels,id', 'body' => ['required', new SpamFree]]);
-
+        $response = Zttp::asFormParams()->post('https://www.google.com/recaptcha/api/siteverify', ['secret' => config('services.recaptcha.secret'), 'response' => request('g-recaptcha-response'), 'remoteip' => request()->ip()]);
+        if (!$response->json()['success']) {
+            throw new \Exception('Recaptcha failed');
+        }
         $thread = Thread::create(['user_id' => auth()->id(), 'channel_id' => request('channel_id'), 'title' => request('title'), 'body' => request('body')]);
         if (request()->wantsJson()) {
             return response($thread, 201);
@@ -56,9 +60,6 @@ class ThreadController extends Controller
     public function destroy($channel, Thread $thread)
     {
         $this->authorize('update', $thread);
-        if ($thread->user_id != auth()->id()) {
-            abort(403, 'YOU DO NOT HAVE PERMISSION ');
-        }
         $thread->delete();
         if (request()->wantsJson()) return response([], 204); else return redirect('/threads');
     }

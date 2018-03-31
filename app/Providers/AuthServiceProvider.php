@@ -12,11 +12,7 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $policies = [
-        'App\Thread' => 'App\Policies\ThreadPolicy',
-        'App\Reply' => 'App\Policies\ReplyPolicy',
-        'App\User' => 'App\Policies\UserPolicy',
-    ];
+    protected $policies = ['App\Thread' => 'App\Policies\ThreadPolicy', 'App\Reply' => 'App\Policies\ReplyPolicy', 'App\User' => 'App\Policies\UserPolicy',];
 
     /**
      * Register any authentication / authorization services.
@@ -25,11 +21,15 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
+        Gate::before(function ($user) {
+            if ($user->isAdmin()) {
+                return true;
+            }
+            else{
+                return false;
+            }
 
-        Gate::before(function($user){
-            if($user->name === 'JohnDoe') return true;
         });
-        //
+        $this->registerPolicies();
     }
 }
