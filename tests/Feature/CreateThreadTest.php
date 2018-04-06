@@ -27,11 +27,9 @@ class CreateThreadTest extends TestCase
     {
         $this->withExceptionHandling();
 
-        $this->get('/threads/create')
-            ->assertRedirect(route('login'));
+        $this->get('/threads/create')->assertRedirect(route('login'));
 
-        $this->post(route('threads'))
-            ->assertRedirect(route('login'));
+        $this->post(route('threads'))->assertRedirect(route('login'));
     }
 
     /** @test */
@@ -43,9 +41,7 @@ class CreateThreadTest extends TestCase
 
         $thread = make('App\Thread');
 
-        $this->post(route('threads'), $thread->toArray())
-            ->assertRedirect(route('threads'))
-            ->assertSessionHas('flash', 'You must first confirm email address');
+        $this->post(route('threads'), $thread->toArray())->assertRedirect(route('threads'))->assertSessionHas('flash', 'You must first confirm email address');
     }
 
     /** @test */
@@ -53,23 +49,42 @@ class CreateThreadTest extends TestCase
     {
         $response = $this->publishThread(['title' => 'Some Title', 'body' => 'Some body.']);
 
-        $this->get($response->headers->get('Location'))
-            ->assertSee('Some Title')
-            ->assertSee('Some body.');
+        $this->get($response->headers->get('Location'))->assertSee('Some Title')->assertSee('Some body.');
     }
 
     /** @test */
     function a_thread_requires_a_title()
     {
-        $this->publishThread(['title' => null])
-            ->assertSessionHasErrors('title');
+        $this->publishThread(['title' => null])->assertSessionHasErrors('title');
     }
 
     /** @test */
     function a_thread_requires_a_body()
     {
-        $this->publishThread(['body' => null])
-            ->assertSessionHasErrors('body');
+        $this->publishThread(['body' => null])->assertSessionHasErrors('body');
+    }
+
+    /** @test */
+    function a_thread_requires_body_title_to_update()
+    {
+        $this->withExceptionHandling();
+        $this->signIn();
+        $thread = create('App\Thread', ['user_id' => auth()->id()]);
+        $this->patch($thread->path(), ['title' => 'Changed'])->assertSessionHasErrors('body');
+        $thread = create('App\Thread', ['user_id' => auth()->id()]);
+        $this->patch($thread->path(), ['body' => 'Changed'])->assertSessionHasErrors('title');
+        $thread = create('App\Thread', ['user_id' => auth()->id()]);
+        $this->patch($thread->path(), [])->assertSessionHasErrors('title','body');
+    }
+
+    /** @test */
+    function a_thread_can_be_updated()
+    {
+        $this->signIn();
+        $thread = create('App\Thread', ['user_id' => auth()->id()]);
+        $this->patch($thread->path(), ['title' => 'Changed', 'body' => 'Changed Body']);
+        $this->assertEquals('Changed', $thread->fresh()->title);
+        $this->assertEquals('Changed Body', $thread->fresh()->body);
     }
 
     /** @test */
@@ -77,8 +92,7 @@ class CreateThreadTest extends TestCase
     {
         unset(app()[Recaptcha::class]);
 
-        $this->publishThread(['g-recaptcha-response' => 'test'])
-            ->assertSessionHasErrors('g-recaptcha-response');
+        $this->publishThread(['g-recaptcha-response' => 'test'])->assertSessionHasErrors('g-recaptcha-response');
     }
 
     /** @test */
@@ -86,11 +100,9 @@ class CreateThreadTest extends TestCase
     {
         factory('App\Channel', 2)->create();
 
-        $this->publishThread(['channel_id' => null])
-            ->assertSessionHasErrors('channel_id');
+        $this->publishThread(['channel_id' => null])->assertSessionHasErrors('channel_id');
 
-        $this->publishThread(['channel_id' => 999])
-            ->assertSessionHasErrors('channel_id');
+        $this->publishThread(['channel_id' => 999])->assertSessionHasErrors('channel_id');
     }
 
     /** @test */

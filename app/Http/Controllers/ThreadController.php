@@ -49,18 +49,12 @@ class ThreadController extends Controller
             'title' => ['required', new SpamFree],
             'channel_id' => 'required|exists:channels,id',
             'body' => ['required', new SpamFree],
-            'g-recaptcha-response' => ['required',$recaptcha]
+            'g-recaptcha-response' => ['required', $recaptcha]
 
         ];
-        $message = [
-            'g-recaptcha-response.required' => 'RECAPTCHA VERIFICATION REQUIRED!!!'
-        ];
-        request()->validate($rules,$message);
-        $thread = Thread::create([
-            'user_id' => auth()->id(),
-            'channel_id' => request('channel_id'),
-            'title' => request('title'),
-            'body' => request('body')]);
+        $message = ['g-recaptcha-response.required' => 'RECAPTCHA VERIFICATION REQUIRED!!!'];
+        request()->validate($rules, $message);
+        $thread = Thread::create(['user_id' => auth()->id(), 'channel_id' => request('channel_id'), 'title' => request('title'), 'body' => request('body')]);
         if (request()->wantsJson()) {
             return response($thread, 201);
         }
@@ -75,6 +69,17 @@ class ThreadController extends Controller
             return response([], 204);
         }
         return redirect('/threads');
+    }
+
+    public function update($channel, Thread $thread)
+    {
+        $this->authorize('update',$thread);
+        $thread->update(request()->validate([
+            'title' => ['required', new SpamFree],
+            'body' => ['required', new SpamFree],
+
+        ]));
+
     }
 
     public function getThreads(Channel $channel, ThreadFilter $filter)
