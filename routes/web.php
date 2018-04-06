@@ -17,7 +17,11 @@ Auth::routes();
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('my-theme', function () {
 
+    return view('welcome2');
+
+});
 Route::get('/home', 'HomeController@index')->name('home');
 
 //Route::resource('threads', 'ThreadController');
@@ -54,3 +58,6 @@ Route::get('/api/users', 'Api\UsersController@index');
 Route::post('/api/users/{user}/avatar', 'Api\UsersAvatarController@store')->middleware('auth')->name('avatar');
 
 Route::get('/register/confirm', 'Auth\RegisterConfirmationController@index')->name('register.confirm');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
